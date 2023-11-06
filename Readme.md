@@ -9,7 +9,7 @@ ng add @angular-architects/module-federation --type host
  ```
  ng add @angular-architects/module-federation --type remote
  ```
-4. Update the Module Federation Configuration in webpack.config.js file as below to specify the remote-app's server.
+4. Update the Module Federation Configuration in `host-app's` webpack.config.js file as below to specify the remote-app's server.
 ```
 module.exports = withModuleFederationPlugin({
   remotes: {
@@ -26,7 +26,7 @@ module.exports = withModuleFederationPlugin({
 });
 ```
 
-5. Update the remote name in host-app webpack.config.js file & change the domain for remoteEntry.js file.
+5. Update the Module Federation Configuration in `remote-app's` webpack.config.js file as below to expose the required modules/components.
 ```
 module.exports = withModuleFederationPlugin({
   name: "remote-app",
@@ -59,7 +59,7 @@ module.exports = withModuleFederationPlugin({
 declare module "remote-app/FlightsModule";
 ```
 
-(To Demonstrate how to Consume a Component from Angular)
+## (Steps to to expose & consume a Standalone Component in Angular)
 
 8. Create a standalone component in remote-app using angular-cli
 ```
