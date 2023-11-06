@@ -1,6 +1,6 @@
 ## Session Notes - Angular MFE - Webpack Module Federation
 
-1. Clone the github repository Angular_MFE.
+1. Clone the github repository
 2. Expose the webpack configurations by running the below command for (host-app)
 ```
 ng add @angular-architects/module-federation --type host
