@@ -9,12 +9,42 @@ ng add @angular-architects/module-federation --type host
  ```
  ng add @angular-architects/module-federation --type remote
  ```
-4. In the exposes section of remote-app webpack.config.js file 
+4. Update the Module Federation Configuration in webpack.config.js file as below to specify the remote-app's server.
 ```
-	"./FlightsModule": "./src/app/flights/flights.module.ts",
+module.exports = withModuleFederationPlugin({
+  remotes: {
+    "remote-app": "http://localhost:4201/remoteEntry.js",
+  },
+
+  shared: {
+    ...shareAll({
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: "auto",
+    }),
+  },
+});
 ```
 
 5. Update the remote name in host-app webpack.config.js file & change the domain for remoteEntry.js file.
+```
+module.exports = withModuleFederationPlugin({
+  name: "remote-app",
+
+  exposes: {
+    "./FlightsModule": "./src/app/flights/flights.module.ts",
+  },
+
+  shared: {
+    ...shareAll({
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: "auto",
+    }),
+  },
+});
+
+```
 
 6. Import the remote-app's FlightModule and consume it in `app-routing.module.ts`
 ```
@@ -35,11 +65,24 @@ declare module "remote-app/FlightsModule";
 ```
 ng g component landing --flat --standalone
 ```
-9. Define route to consume this standalone component in remote-app to include in the compiler.
+9. Define route to consume this standalone component in `remote-app` to include this in the compiler.
+```
+  {
+    path: 'landing',
+    component: LandingComponent,
+    pathMatch: "full"
+  }
+```
+10. Define route to consume this standalone component in `host-app`
 ```
 {
     path: 'landing',
     loadComponent: () => import("remote-app/LandingComponent").then(m => m.LandingComponent),
     pathMatch: 'full'
 },
+```
+
+11. Include the new component as well in the `declare.d.ts` file
+```
+declare module "remote-app/LandingComponent";
 ```
